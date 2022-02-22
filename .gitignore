@@ -20,7 +20,7 @@ _autosave-*
 fp-info-cache
 sym-lib-table
 fp-lib-table
-
+*.pdf
 *.net
 *.dsn
 *.ses
