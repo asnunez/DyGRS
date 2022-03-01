@@ -1,7 +1,8 @@
 # Horus Tech Working group 
-Este es el repositorio donde se expondr· toda la informaciÛn correspondiente al proyecto de 
-la asignatura de Despliege y GestiÛn de Redes y Servicios. AquÌ se encuentran: 
+Este es el repositorio donde se expondr√° toda la informaci√≥n correspondiente al proyecto de 
+la asignatura de Despliege y Gesti√≥n de Redes y Servicios. Aqu√≠ se encuentran: 
 
 - La memoria del proyecto. 
 - La maqueta de las red del proyecto. 
-- Otros apectos a revisar. 
+- El software que usar√°n los servidodres de procesamiento
+- Y m√°s 
