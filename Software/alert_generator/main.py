@@ -1,16 +1,19 @@
 import http.client
-import urllib.error
-import urllib.parse
-import urllib.request
+import tools
 from threading import Thread
 
 
-def process_video(id_camera) -> None:
-    headers, params = url_define()
+def process_video(id_camera, number) -> None:
+    print(id_camera)
+    print('thread number %c', number)
+
+    headers = tools.headers
+    params = tools.params
+    url_img = tools.get_frame(id_camera, number)
 
     try:
         conn = http.client.HTTPSConnection('westus.api.cognitive.microsoft.com')
-        conn.request("POST", "/face/v1.0/detect?%s" % params, "{body}", headers)
+        conn.request('POST', "/face/v1.0/detect?%s" % params, url_img, headers)
         response = conn.getresponse()
         data = response.read()
         print(data)
@@ -19,40 +22,13 @@ def process_video(id_camera) -> None:
         print("[Errno {0}] {1}".format(e.errno, e.strerror))
 
 
-def url_define():
-    attributes = 'mask,gender'
-    subscription_key = 'key'
-
-    headers = {
-        # Request headers
-        'Content-Type': 'application/jason',
-        'Ocp-Apim-Subscription-Key': subscription_key,
-    }
-
-    params = urllib.parse.urlencode({
-        # Request parameters
-        'returnFaceId': 'true',
-        'returnFaceLandmarks': 'false',
-        'returnFaceAttributes': attributes,
-        'recognitionModel': 'recognition_04',
-        'returnRecognitionModel': 'false',
-        'detectionModel': 'detection_03',
-        'faceIdTimeToLive': '86400',
-    })
-
-    return [headers, params]
-
-
 def main() -> None:
-    camaras = [
-        "rstp://camera1/dfdsf.mp4",
-        "rstp://camera2/dfdsf.mp4",
-        "rstp://camera3/dfdsf.mp4",
-        "rstp://camera4/dfdsf.mp4",
-        "rstp://camera5/dfdsf.mp4"
+    videos = [
+        r'C:\Users\danyk\Videos\Videos_Prueba\video_1.mp4',
+        r'C:\Users\danyk\Videos\Videos_Prueba\video_2.mp4'
     ]
 
-    threads = [Thread(target=process_video, args=(c,)) for c in camaras]
+    threads = [Thread(target=process_video, args=(c, d)) for c in videos for d in range(0, len(videos))]
 
     [t.start() for t in threads]
 
