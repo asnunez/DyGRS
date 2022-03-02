@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horus Tech portal</title>
+</head>
+<body>
+<h1>Last event</h1>
+<div id="counter"></div>
+
+<script>
+    var eventSource = new EventSource("/get-alerts")
+
+    eventSource.addEventListener("message", function(e) {
+      console.log(e.data)
+    }, false)
+
+    eventSource.addEventListener("alert", function(e) {
+      data = JSON.parse(e.data)
+      console.log(data)
+      document.querySelector("#counter").innerText = data.camera
+    }, true)
+
+
+</script>
+
+</body>
+</html>
