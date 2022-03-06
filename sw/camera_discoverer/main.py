@@ -2,7 +2,6 @@ import argparse
 import logging
 from time import sleep
 from typing import cast
-
 from zeroconf import IPVersion, ServiceBrowser, ServiceStateChange, Zeroconf, ZeroconfServiceTypes
 
 

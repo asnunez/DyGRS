@@ -30,7 +30,6 @@ def check_frame(frame: bytes) -> int:
         conn.request('POST', "/face/v1.0/detect?%s" % params, frame, headers)
         response = conn.getresponse()
         data = response.read()
-        #print(data)
         conn.close()
         result = identify_alert(data)
 
