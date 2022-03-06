@@ -1,6 +1,6 @@
 from typing import List
 
-from sw.services_provider import db
+from sw.http_server.app import db
 
 
 class Alert(db.Model):
@@ -14,5 +14,6 @@ class Alert(db.Model):
 class Camera(db.Model):
     id: int = db.Column(db.Integer, primary_key=True)
     alias: str = db.Column(db.String(256))
+    url: str = db.Column(db.String(256))
     active: bool = db.Column(db.Boolean)
     alerts: List[Alert] = db.relationship('Alert')
