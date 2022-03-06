@@ -1,5 +1,6 @@
-import http.client
+import time
 import tools
+import cv2
 from threading import Thread
 
 
@@ -7,19 +8,17 @@ def process_video(id_camera, number) -> None:
     print(id_camera)
     print('thread number %c', number)
 
-    headers = tools.headers
-    params = tools.params
-    url_img = tools.get_frame(id_camera, number)
-
     try:
-        conn = http.client.HTTPSConnection('westus.api.cognitive.microsoft.com')
-        conn.request('POST', "/face/v1.0/detect?%s" % params, url_img, headers)
-        response = conn.getresponse()
-        data = response.read()
-        print(data)
-        conn.close()
-    except OSError as e:
-        print("[Errno {0}] {1}".format(e.errno, e.strerror))
+        capture = cv2.VideoCapture(id_camera)
+        while True:
+            ret, frame = capture.read()
+            if ret:
+                result = tools.check_frame(frame)
+                if result == 1:
+                    tools.notify_alert('camera-X')
+            time.sleep(1)
+    finally:
+        capture.release()
 
 
 def main() -> None:
