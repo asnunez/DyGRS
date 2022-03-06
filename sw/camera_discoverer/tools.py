@@ -7,7 +7,7 @@ def create_json(ip: str, state: bool, number: int) -> json:
         camera_info = {
             "camera":
                 {
-                    "alias": "camera%d" % number,
+                    "alias": "camera-%d" % number,
                     "url": "rtsp://%s:554" % ip,
                     "active": "True"
                 }
@@ -16,7 +16,7 @@ def create_json(ip: str, state: bool, number: int) -> json:
         camera_info = {
             "camera":
                 {
-                    "alias": "camera%d" % number,
+                    "alias": "camera-%d" % number,
                     "url": "rtsp://%s:554" % ip,
                     "active": "False"
                 }
@@ -28,3 +28,4 @@ def create_json(ip: str, state: bool, number: int) -> json:
 def send_discover(ip: str, state: bool, number: int) -> None:
     camera_info = create_json(ip, state, number)
     requests.post("http://10.254.14.117:80/register-camera", json=camera_info)
+    print(camera_info)

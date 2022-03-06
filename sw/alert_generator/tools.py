@@ -1,7 +1,9 @@
+import json
 import urllib.parse
 import urllib.request
 import http.client
 import requests
+import time
 
 attributes = 'mask'
 subscription_key = '9c2fe1a150ff4ec298a101f4495e19fa'
@@ -31,7 +33,7 @@ def check_frame(frame: bytes) -> int:
         response = conn.getresponse()
         data = response.read()
         conn.close()
-        result = identify_alert(data)
+        result = identify_alert(str(data))
 
         return result
     except OSError as e:
@@ -40,7 +42,26 @@ def check_frame(frame: bytes) -> int:
 
 def notify_alert(id_camera) -> None:
     # Manda la notificacion al cliente diciendo que no tiene mascarilla
-    requests.post('http://10.254.14.117:80/save-alert', json={"alert": "no mask", "camera": f"{id_camera}"})
+    alert = {
+        "alert":
+            {
+                "type": "no mask",
+                "camera": f"{id_camera}",
+                "timestamp": f"{time.time()}"
+            }
+    }
+    requests.post('http://10.254.14.117:80/save-alert', json=alert)
+
+
+def get_cameras() -> list:
+    response = requests.get("http://10.254.14.117:80/get-active-cameras")
+    values = json.loads(response)
+    aliases = list
+    for entity in values:
+        alias = entity["alias"]
+        aliases.append(alias)
+
+    return aliases
 
 
 def identify_alert(result: str) -> int:
@@ -50,5 +71,3 @@ def identify_alert(result: str) -> int:
         return 1
     else:
         return -1
-
-
