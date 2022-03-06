@@ -1,13 +1,13 @@
 import urllib.parse
 import urllib.request
-from cv2 import cv2
+import cv2
 
 attributes = 'mask,gender'
 subscription_key = 'key'
 
 headers = {
     # Request headers
-    'Content-Type': 'application/jason',
+    'Content-Type': 'application/json',
     'Ocp-Apim-Subscription-Key': subscription_key,
 }
 

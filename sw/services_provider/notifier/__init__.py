@@ -3,7 +3,7 @@ import json
 import flask
 from flask import Response, request
 
-from Software.services_provider.notifier.notifier import Notifier
+from sw.services_provider.notifier.notifier import Notifier
 
 notifier = flask.Blueprint("notifier", __name__)
 nf = Notifier()

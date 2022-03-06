@@ -1,6 +1,6 @@
 from typing import List
 
-from Software.services_provider import db
+from sw.services_provider import db
 
 
 class Alert(db.Model):
