@@ -1,10 +1,13 @@
-from flask import render_template, Response
-from sw.http_server.app import app, db
+import flask
+from flask import render_template
+
+from sw.http_server.app import app
+from sw.http_server.app.services import cameras, alerts
 
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html")
+    return render_template("index.html", title='Home Page')
 
 
 @app.route("/get-active-cameras", methods=["GET"])
@@ -19,7 +22,9 @@ def get_active_cameras():
           ...
           ]
       }"""
-    pass
+    data = cameras.active_cameras()
+
+    return flask.jsonify(data)
 
 
 @app.route("/register-camera", methods=["POST"])
@@ -32,7 +37,12 @@ def register_camera():
         }
      }
      and registers or updates this information into the database"""
-    pass
+
+    data = flask.request.get_json()
+
+    cameras.register_camera(data)
+
+    return flask.Response(status=200)
 
 
 @app.route("/save-alert", methods=["POST"])
@@ -44,7 +54,10 @@ def save_alert():
          "timestamp": 12345678}
      }
      and saves the alert with the status True"""
-    pass
+    data = flask.request.get_json()
+    alerts.save_alert(data)
+
+    return flask.Response(status=200)
 
 
 @app.route("/resolve-alert", methods=["POST"])
@@ -52,7 +65,10 @@ def resolve_alert():
     """Consumes a JSON file with the following format:
      {"id": 12}
      and toggle the status of the alert to False"""
-    pass
+    data = flask.request.get_json()
+    alerts.resolve_alert(data)
+
+    return flask.Response(status=200)
 
 
 @app.route("/alert-subscription", methods=["GET"])
