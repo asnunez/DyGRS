@@ -1,10 +1,10 @@
-from flask import render_template
+from flask import render_template, Response
 from sw.http_server.app import app, db
 
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html", title='Home Page')
+    return render_template("index.html")
 
 
 @app.route("/get-active-cameras", methods=["GET"])

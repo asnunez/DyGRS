@@ -17,8 +17,6 @@ def register_camera(data: str) -> None:
 
     camera_dict = data_dict["camera"]
 
-
-
     camera = Camera.query.filter(alias=camera_dict["alias"]).first()
 
     if not camera:
@@ -31,5 +29,3 @@ def register_camera(data: str) -> None:
 
     camera.url = camera_dict["url"]
     camera.active = camera_dict["active"] == "True"
-
-
