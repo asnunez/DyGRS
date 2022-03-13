@@ -3,6 +3,7 @@ from flask import render_template
 
 from sw.http_server.app import app
 from sw.http_server.app.services import cameras, alerts
+from sw.http_server.app.services.cameras import frames_generator
 
 
 @app.route("/", methods=["GET"])
@@ -39,7 +40,6 @@ def register_camera():
      and registers or updates this information into the database"""
 
     data = flask.request.get_json()
-
     cameras.register_camera(data)
 
     return flask.Response(status=200)
@@ -71,8 +71,8 @@ def resolve_alert():
     return flask.Response(status=200)
 
 
-@app.route("/alert-subscription", methods=["GET"])
-def alert_subscription():
+@app.route("/get-unresolved-alerts", methods=["GET"])
+def get_unresolved_alerts():
     """Provides a JSON file with the current active alerts. Following the format:
     { "alerts": [
             {
@@ -87,22 +87,21 @@ def alert_subscription():
             "camera": "camera-1",
             "timestamp": 123124322312
             },
-                       {
-            "id": 15,
-            "type": "No mask detected"
-            "camera": "camera-1",
-            "timestamp": 123124323124
-            }
             ...
         ]
     }
     """
-    pass
+    data = alerts.unresolved_alerts()
+
+    return flask.jsonify(data)
 
 
 @app.route("/camera-streaming", methods=["POST"])
 def camera_streaming():
     """Consumes a JSON file with the following format:
-    {"camera-alias": "camera-1"}
+    {"alias": "camera-1"}
     and returns a video streaming"""
-    pass
+
+    cam_url = cameras.get_url_from_alias(flask.request.get_json()["alias"])
+
+    return flask.Response(frames_generator(cam_url), mimetype='multipart/x-mixed-replace; boundary=frame')
