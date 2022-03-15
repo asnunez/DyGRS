@@ -26,11 +26,12 @@ def save_alert(data: Dict):
 
 def resolve_alert(data: Dict):
     """{"id": 12}"""
-    alert = Alert.query.filter_by(id=data["id"]).resolved = True
+    alert = Alert.query.filter_by(id=data["id"]).first()
+    alert.resolved = True
     db.session.commit()
 
 
-def unresolved_alerts() -> str:
+def unresolved_alerts() -> Dict:
     """Returns a list of unresolved alerts."""
     alerts = Alert.query.filter_by(resolved=False).all()
 
@@ -41,4 +42,4 @@ def unresolved_alerts() -> str:
         [alerts_dict["alerts"].append({"id": a.id, "type": a.type, "camera": camera_alias, "timestamp": a.timestamp})
          for a in alerts]
 
-    return json.dumps(alerts_dict)
+    return alerts_dict
