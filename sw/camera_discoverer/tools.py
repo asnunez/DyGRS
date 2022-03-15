@@ -1,5 +1,5 @@
-import json
 from typing import Dict
+import config
 
 import requests
 
@@ -23,5 +23,6 @@ def create_json(host: str, alias: str, state: bool) -> Dict:
 
 def send_discover(host: str, alias: str, state: bool) -> None:
     camera_info = create_json(host, alias, state)
-    requests.post("http://10.109.76.15:5000/register-camera", json=camera_info)
+    requests.post('http://' + config.config.HTTP_SERVER_IP + ':' +
+                  str(config.config.HTTP_SERVER_PORT) + '/register-camera', json=camera_info)
     print(camera_info)

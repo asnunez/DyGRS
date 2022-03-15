@@ -4,14 +4,14 @@ import urllib.request
 import http.client
 import requests
 import time
+import config
 
 attributes = 'mask'
-subscription_key = '9c2fe1a150ff4ec298a101f4495e19fa'
 
 headers = {
     # Request headers
     'Content-Type': 'application/octet-stream',
-    'Ocp-Apim-Subscription-Key': subscription_key,
+    'Ocp-Apim-Subscription-Key': config.config.API_KEY,
 }
 
 params = urllib.parse.urlencode({
@@ -28,7 +28,7 @@ params = urllib.parse.urlencode({
 
 def check_frame(frame: bytes) -> int:
     try:
-        conn = http.client.HTTPSConnection('westeurope.api.cognitive.microsoft.com')
+        conn = http.client.HTTPSConnection(config.config.API_FACE_DOMAIN)
         conn.request('POST', "/face/v1.0/detect?%s" % params, frame, headers)
         response = conn.getresponse()
         data = response.read()
@@ -41,7 +41,6 @@ def check_frame(frame: bytes) -> int:
 
 
 def notify_alert(id_camera) -> None:
-    # Manda la notificacion al cliente diciendo que no tiene mascarilla
     alert = {
         "alert":
             {
@@ -50,11 +49,13 @@ def notify_alert(id_camera) -> None:
                 "timestamp": f"{time.time()}"
             }
     }
-    requests.post('http://10.254.14.117:80/save-alert', json=alert)
+    requests.post('http://' + config.config.HTTP_SERVER_IP + ':'
+                  + str(config.config.HTTP_SERVER_PORT) + '/save-alert', json=alert)
 
 
 def get_cameras() -> list:
-    response = requests.get("http://10.254.14.117:80/get-active-cameras")
+    response = requests.get('http://' + config.config.HTTP_SERVER_IP + ':' +
+                            str(config.config.HTTP_SERVER_PORT) + '/get-active-cameras')
     values = json.loads(response)
     aliases = list
     for entity in values:
