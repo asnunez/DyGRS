@@ -11,6 +11,4 @@ class Config:
         self.HTTP_SERVER_IP = data["HTTP_SERVER_IP"]
 
 
-if __name__ == '__main__':
-    config = Config("config.json")
-    print(config.HTTP_SERVER_PORT)
+config = Config("config.json")
