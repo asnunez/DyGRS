@@ -1,6 +1,6 @@
 from typing import List
 
-from sw.http_server.app import db
+from . import db
 
 
 class Alert(db.Model):

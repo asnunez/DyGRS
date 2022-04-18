@@ -2,7 +2,6 @@ import json
 
 
 class Config:
-
     def __init__(self, path: str):
         with open(path) as fd:
             data = json.loads(fd.read())
@@ -13,6 +12,4 @@ class Config:
         self.API_KEY = data["API_KEY"]
 
 
-if __name__ == '__main__':
-    config = Config("config.json")
-    print(config.API_FACE_DOMAIN)
+config = Config("config.json")

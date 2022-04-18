@@ -1,8 +1,8 @@
 import json
 from typing import Dict
 
-from sw.http_server.app import db
-from sw.http_server.app.models import Alert, Camera
+from .. import db
+from ..models import Alert, Camera
 
 
 def save_alert(data: Dict):

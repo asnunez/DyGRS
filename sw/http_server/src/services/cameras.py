@@ -3,8 +3,8 @@ from typing import Dict
 
 import cv2
 
-from sw.http_server.app import db
-from sw.http_server.app.models import Camera
+from .. import db
+from ..models import Camera
 
 
 def active_cameras() -> Dict:

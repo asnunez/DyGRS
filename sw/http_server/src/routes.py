@@ -1,9 +1,9 @@
 import flask
 from flask import render_template
 
-from sw.http_server.app import app
-from sw.http_server.app.services import cameras, alerts
-from sw.http_server.app.services.cameras import frames_generator
+from . import app
+from .services import cameras, alerts
+from .services.cameras import frames_generator
 
 
 @app.route("/", methods=["GET"])
