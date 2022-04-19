@@ -11,39 +11,43 @@ from src.models import Camera
 from src.api_face import check_frame
 
 
-def proc_video(cam: Camera) -> None:
-    end = False
-
-    def end_proc():
-        nonlocal end
-        end = True
-
-    timer = threading.Timer(interval=30, function=end_proc)
-
-    timer.start()
-
-    video_cam = cv2.VideoCapture(cam.host)
-
-    try:
-
-        while not end:
-            ret, frame = video_cam.read()
-            if ret:
-                alert = check_frame(frame)
-                if alert:
-                    notify_alert(cam.alias)
-            time.sleep(1)
-    finally:
-        video_cam.release()
-
-
 def main() -> None:
     logging.basicConfig(stream=sys.stdout, level=logging.INFO, format="%(asctime)s %(message)s")
+
+    def proc_video(cam: Camera) -> None:
+
+        logging.info(f"Starting new thread for {cam.host}")
+
+        end = False
+
+        def end_proc():
+            nonlocal end
+            end = True
+
+        timer = threading.Timer(interval=30, function=end_proc)
+
+        timer.start()
+
+        video_cam = cv2.VideoCapture(cam.host)
+
+        try:
+            while not end:
+                ret, frame = video_cam.read()
+                if ret:
+                    alert = check_frame(frame)
+                    if alert:
+                        notify_alert(cam.alias)
+                time.sleep(1)
+        finally:
+            video_cam.release()
+
+        logging.info(f"Ending thread for {cam.host}")
 
     while True:
         cameras: List[Camera] = get_active_cameras()
 
         if not cameras:
+            time.sleep(10)
             continue
 
         threads = [threading.Thread(target=proc_video, args=(camera,)) for camera in cameras]
