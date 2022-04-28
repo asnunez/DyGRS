@@ -29,9 +29,9 @@ params = urllib.parse.urlencode({
 def is_alert(result: str) -> bool:
 
     if result.find('faceMask') > -1:
-        return True
-    elif result.find('noMask') > -1:
         return False
+    elif result.find('noMask') > -1:
+        return True
     else:
         return False
 

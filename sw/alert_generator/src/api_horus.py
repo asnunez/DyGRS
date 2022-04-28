@@ -1,8 +1,8 @@
+import logging
 import time
 from typing import List
-import json
+
 import requests
-import logging
 
 from .config import config
 from .models import Camera
@@ -36,6 +36,9 @@ def get_active_cameras() -> List:
         response = requests.get(endpoint)
     except (OSError, ConnectionError) as e:
         logging.error(e)
+        return ret
+
+    if response.status_code.real != 200:
         return ret
 
     for entity in response.json().get("cameras"):

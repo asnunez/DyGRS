@@ -1,13 +1,14 @@
+import logging
 import sys
 import threading
 import time
 from typing import List
-import logging
+
 import cv2
 
+from src.api_face import check_frame
 from src.api_horus import get_active_cameras, notify_alert
 from src.models import Camera
-from src.api_face import check_frame, test
 
 
 def main() -> None:
@@ -52,6 +53,7 @@ def main() -> None:
         cameras: List[Camera] = get_active_cameras()
 
         if not cameras:
+            logging.info("Not cameras available from HTTP Server. Trying in 10 seconds")
             time.sleep(10)
             continue
 
@@ -59,21 +61,6 @@ def main() -> None:
 
         [thread.start() for thread in threads]
         [thread.join() for thread in threads]
-
-
-def tes1t():
-    video_cap = cv2.VideoCapture(0)
-    while True:
-        # `success` is a boolean and `frame` contains the next video frame
-        success, frame = video_cap.read()
-        cv2.imshow("frame", frame)
-        # wait 20 milliseconds between frames and break the loop if the `q` key is pressed
-        if cv2.waitKey(20) == ord('q'):
-            break
-
-    # we also need to close the video and destroy all Windows
-    video_cap.release()
-    cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
