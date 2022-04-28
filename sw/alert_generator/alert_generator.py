@@ -27,7 +27,7 @@ def main() -> None:
 
         timer.start()
 
-        video_cam = cv2.VideoCapture(0)
+        video_cam = cv2.VideoCapture(f"{cam.host}/cam")
 
         logging.info(f"Starting video capture from {cam.host}")
 
