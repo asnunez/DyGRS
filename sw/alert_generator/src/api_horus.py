@@ -20,6 +20,8 @@ def notify_alert(camera_alias) -> None:
 
     endpoint = f"http://{config.HTTP_SERVER_IP}:{config.HTTP_SERVER_PORT}/save-alert"
 
+    logging.info(f"Notifying alert {alert}")
+
     try:
         requests.post(endpoint, json=alert)
     except (OSError, ConnectionError) as e:

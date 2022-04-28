@@ -1,7 +1,8 @@
+import http.client
 import logging
+import re
 import urllib.parse
 import urllib.request
-import http.client
 
 from .config import config
 
@@ -25,18 +26,19 @@ params = urllib.parse.urlencode({
 })
 
 
-def is_alert(result: str) -> int:
+def is_alert(result: str) -> bool:
+
     if result.find('faceMask') > -1:
-        return False
-    elif result.find('noMask') > -1:
         return True
+    elif result.find('noMask') > -1:
+        return False
     else:
         return False
 
 
-def check_frame(frame: bytes) -> int:
+def check_frame(frame: bytes) -> bool:
     try:
-        conn = http.client.HTTPSConnection(config.config.API_FACE_DOMAIN)
+        conn = http.client.HTTPSConnection(config.API_FACE_DOMAIN)
         conn.request('POST', "/face/v1.0/detect?%s" % params, frame, headers)
         response = conn.getresponse()
         data = response.read()
@@ -45,4 +47,17 @@ def check_frame(frame: bytes) -> int:
         return is_alert(str(data))
 
     except OSError as e:
-        logging.error(e.strerror)
+        logging.error(e)
+
+
+def test():
+    img = "aaa.png"
+
+    data = ""
+
+    with open(img, "rb") as fd:
+        data = fd.read()
+
+    print(check_frame(data))
+
+
