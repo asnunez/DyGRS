@@ -20,15 +20,15 @@ def main() -> None:
 
         end = False
 
-        def end_proc():
+        def end_thread():
             nonlocal end
             end = True
 
-        timer = threading.Timer(interval=30, function=end_proc)
+        timer = threading.Timer(interval=30, function=end_thread)
 
         timer.start()
 
-        video_cam = cv2.VideoCapture(f"{cam.host}/cam")
+        video_cam = cv2.VideoCapture(f"{cam.host}")
 
         logging.info(f"Starting video capture from {cam.host}")
 
@@ -44,7 +44,6 @@ def main() -> None:
                         notify_alert(cam.alias)
                     time.sleep(1)
         finally:
-            cv2.destroyAllWindows()
             video_cam.release()
 
         logging.info(f"Ending thread for {cam.host}")
