@@ -10,7 +10,7 @@ from ..models import Camera
 def active_cameras() -> Dict:
     cameras = Camera.query.filter_by(active=True).all()
 
-    ret = {"cameras": [{"id": c.id, "alias": c.alias, "url": c.url} for c in cameras]}
+    ret = {"cameras": [{"id": c.id, "alias": c.alias, "url": f"{c.url}/cam"} for c in cameras]}
 
     return ret
 
